@@ -17,6 +17,10 @@ doctrine:
         identity_generation_preferences:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
         auto_mapping: true
+        filters:
+            softdeleteable:
+                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                enabled: true #this one doesn't was in the doc, I found it in an issue
         mappings:
             App:
                 type: attribute
@@ -26,6 +30,7 @@ doctrine:
                 alias: App
         controller_resolver:
             auto_mapping: false
+
 
 when@test:
     doctrine:
