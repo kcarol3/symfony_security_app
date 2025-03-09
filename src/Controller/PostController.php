@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\PostRepository;
+use App\Security\Voter\PostVoter;
+use App\Security\Voter\VoterAction;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,12 +28,12 @@ final class PostController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $post = new Post();
+        $post->setCreatedBy($this->getUser())
+            ->setCreatedAt(new \DateTimeImmutable('now'));
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $post->setCraetedBy($this->getUser())
-                ->setCreatedAt(new \DateTimeImmutable('now'));
             $entityManager->persist($post);
             $entityManager->flush();
 
@@ -47,6 +49,8 @@ final class PostController extends AbstractController
     #[Route('/{id}', name: 'app_post_show', methods: ['GET'])]
     public function show(Post $post): Response
     {
+        $this->denyAccessUnlessGranted(VoterAction::VIEW, $post);
+
         return $this->render('post/show.html.twig', [
             'post' => $post,
         ]);
@@ -55,6 +59,8 @@ final class PostController extends AbstractController
     #[Route('/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted(VoterAction::EDIT, $post);
+
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
@@ -73,6 +79,8 @@ final class PostController extends AbstractController
     #[Route('/{id}', name: 'app_post_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted(VoterAction::DELETE, $post);
+
         if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($post);
             $entityManager->flush();

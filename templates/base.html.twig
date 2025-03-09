@@ -15,6 +15,22 @@
 
     </head>
     <body>
-        {% block body %}{% endblock %}
+    {% if app.user %}
+        <div class="mb-3">
+            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            <a href="{{ path('app_user_edit', { id: app.user.id }) }}">Edit</a>
+        </div>
+    {% endif %}
+    {% for flash_message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+    {% for flash_message in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+    {% block body %}{% endblock %}
     </body>
 </html>

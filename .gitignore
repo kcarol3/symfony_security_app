@@ -175,3 +175,4 @@ fabric.properties
 /.idea/
 
 # End of https://www.toptal.com/developers/gitignore/api/phpstorm,symfony
+/admin_user.sql
