@@ -1,0 +1,1 @@
+{"version":1,"defects":{"App\\Tests\\CsrfTest::testCsrfTokenValidation":4,"LoginFormTest::testLoginFormCsrfToken":3},"times":{"App\\Tests\\CsrfTest::testCsrfTokenValidation":0.485,"LoginFormTest::testLoginFormCsrfToken":0.432}}

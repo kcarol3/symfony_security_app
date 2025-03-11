@@ -16,9 +16,8 @@
         <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password"
                required>
 
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
+        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
 
         {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
@@ -29,7 +28,6 @@
             <label for="_remember_me">Remember me</label>
         </div>
         #}
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         <button class="btn btn-lg btn-primary mt-3" type="submit">
             Sign in
         </button>

@@ -2,14 +2,26 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
-    # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    # Konfiguracja sesji
+    session:
+        handler_id: null
+        storage_factory_id: 'session.storage.factory.native'
+        cookie_lifetime: 3600   # Czas życia sesji w sekundach (3600s = 1 godzina)
+        gc_maxlifetime: 3600    # Maksymalny czas życia sesji na serwerze
+        cookie_secure: auto     # Automatyczne ustawianie ciasteczka jako secure (HTTPS)
+        cookie_samesite: lax    # Zapobiega atakom CSRF, ale pozwala na współdzielenie ciasteczek między subdomenami
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%' # Ścieżka do przechowywania sesji
 
-    #esi: true
-    #fragments: true
+    csrf_protection: ~
+
+    # Konfiguracja ochrony CSRF w formularzach
+    form:
+        csrf_protection:
+            enabled: true
+            field_name: '_csrf_token'
 
 when@test:
     framework:
         test: true
         session:
-            storage_factory_id: session.storage.factory.mock_file
+            storage_factory_id: 'session.storage.factory.mock_file'

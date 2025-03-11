@@ -16,6 +16,13 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api:
+            pattern: ^/api
+            stateless: true
+            jwt: ~
+            login_throttling:
+                max_attempts: 5
+                interval: '5 minutes'
         main:
             lazy: true
             provider: app_user_provider
@@ -27,8 +34,12 @@ security:
             logout:
                 path: app_logout
                 target: app_login
-                # where to redirect after logout
-                # target: app_any_route
+            json_login:
+                check_path: api_login
+
+            login_throttling:
+                max_attempts: 5
+                interval: '5 minutes'
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -41,6 +52,8 @@ security:
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/post, roles: [ROLE_USER, ROLE_ADMIN] }
+         - { path: ^/api, roles: [ROLE_USER, ROLE_ADMIN] }
+         - { path: ^/user, roles: [ROLE_USER, ROLE_ADMIN] }
 
 when@test:
     security:
